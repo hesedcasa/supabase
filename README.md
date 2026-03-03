@@ -26,7 +26,7 @@ $ npm install -g @hesed/supabase
 $ spb COMMAND
 running command...
 $ spb (--version)
-@hesed/supabase/0.1.0 darwin-arm64 node-v22.14.0
+@hesed/supabase/0.1.0 linux-x64 node-v20.20.0
 $ spb --help [COMMAND]
 USAGE
   $ spb COMMAND
@@ -53,11 +53,11 @@ Add a Supabase connection
 
 ```
 USAGE
-  $ spb supabase auth add [--json] [--token <value>] [--url <value>]
+  $ spb supabase auth add --token <value> --url <value> [--json]
 
 FLAGS
-  --token=<value>  API Token:
-  --url=<value>    Supabase API URL:
+  --token=<value>  (required) API Token:
+  --url=<value>    (required) Supabase API URL:
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -97,11 +97,11 @@ Update existing Supabase authentication
 
 ```
 USAGE
-  $ spb supabase auth update [--json] [--token <value>] [--url <value>]
+  $ spb supabase auth update --token <value> --url <value> [--json]
 
 FLAGS
-  --token=<value>  API Token:
-  --url=<value>    Supabase API URL:
+  --token=<value>  (required) API Token:
+  --url=<value>    (required) Supabase API URL:
 
 GLOBAL FLAGS
   --json  Format output as json.
