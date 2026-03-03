@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.0](https://github.com/hesedcasa/supabase/compare/v0.1.0...v0.2.0) (2026-03-03)
+
+
+### 🎉 Features
+
+* initial commit ([63c8c24](https://github.com/hesedcasa/supabase/commit/63c8c2452b6a921b172adc2129555fe82e8f0102))
+
+## Changelog
+
 
 All notable changes to this project will be documented in this file.
 
