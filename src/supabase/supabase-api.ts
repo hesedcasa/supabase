@@ -94,6 +94,7 @@ export class SupabaseApi {
       const requestHeaders: Record<string, string> = {
         apikey: this.config.apiToken,
         Authorization: `Bearer ${this.config.apiToken}`,
+        Connection: 'close',
         'Content-Type': 'application/json',
         Prefer: 'return=representation',
         ...headers,
@@ -132,6 +133,7 @@ export class SupabaseApi {
         headers: {
           apikey: this.config.apiToken,
           Authorization: `Bearer ${this.config.apiToken}`,
+          Connection: 'close',
         },
         method: 'GET',
       })
