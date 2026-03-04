@@ -56,9 +56,6 @@
     "bin": "spb",
     "dirname": "supabase",
     "commands": "./dist/commands",
-    "plugins": [
-      "@oclif/plugin-*"
-    ],
     "topicSeparator": " ",
     "topics": {}
   },
