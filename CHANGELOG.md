@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/hesedcasa/supabase/compare/v0.2.0...v0.2.1) (2026-03-04)
+
+
+### 🛠️ Fixes
+
+* remove unused oclif plugin ([cede613](https://github.com/hesedcasa/supabase/commit/cede6136384bdbf996aae197d671aca136d49423))
+
 ## [0.2.0](https://github.com/hesedcasa/supabase/compare/v0.1.0...v0.2.0) (2026-03-03)
 
 
