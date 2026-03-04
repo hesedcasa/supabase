@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/hesedcasa/supabase/compare/v0.2.1...v0.2.2) (2026-03-04)
+
+
+### 🛠️ Fixes
+
+* add Connection close header to prevent slow CLI exit ([#4](https://github.com/hesedcasa/supabase/issues/4)) ([a4e30fc](https://github.com/hesedcasa/supabase/commit/a4e30fc9b1df5ed4a0f50844a058c696f4252ad6))
+
 ## [0.2.1](https://github.com/hesedcasa/supabase/compare/v0.2.0...v0.2.1) (2026-03-04)
 
 
