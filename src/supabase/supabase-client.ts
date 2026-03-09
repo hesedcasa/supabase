@@ -99,9 +99,10 @@ export async function getTableColumns(config: AuthConfig, tableName: string): Pr
   }
 
   for (const column of Object.keys(((definitions as IDataObject)[tableName] as IDataObject).properties as object)) {
-    const {type} = (((definitions as IDataObject)[tableName] as IDataObject).properties as IDataObject)[
+    const columnDef = (((definitions as IDataObject)[tableName] as IDataObject).properties as IDataObject)[
       column
     ] as IDataObject
+    const type = columnDef.type ?? columnDef.format ?? 'object'
     returnData.push({
       name: `${column} - (${type})`,
       value: column,
