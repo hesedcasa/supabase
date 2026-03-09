@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/hesedcasa/supabase/compare/v0.2.2...v0.2.3) (2026-03-09)
+
+
+### 🛠️ Fixes
+
+* resolve undefined type for JSON/object columns in table-columns output ([#6](https://github.com/hesedcasa/supabase/issues/6)) ([8c2349b](https://github.com/hesedcasa/supabase/commit/8c2349be7c2052b8451a21bef48792cde1e27f77))
+
 ## [0.2.2](https://github.com/hesedcasa/supabase/compare/v0.2.1...v0.2.2) (2026-03-04)
 
 
