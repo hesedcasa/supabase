@@ -41,7 +41,7 @@ export class SupabaseApi {
     this.config = config
   }
 
-  buildGetQuery(obj: Record<string, string>, value: FilterCondition): Record<string, string> {
+  buildGetQuery(obj: Record<string, string | string[]>, value: FilterCondition): Record<string, string | string[]> {
     return Object.assign(obj, {[value.keyName]: `eq.${value.keyValue}`})
   }
 
@@ -53,7 +53,7 @@ export class SupabaseApi {
     return `${key.keyName}.${key.condition}.${key.keyValue}`
   }
 
-  buildQuery(obj: Record<string, string>, value: FilterCondition): Record<string, string> {
+  buildQuery(obj: Record<string, string | string[]>, value: FilterCondition): Record<string, string | string[]> {
     if (value.condition === 'fullText') {
       return Object.assign(obj, {[value.keyName]: `${value.searchFunction}.${value.keyValue}`})
     }
@@ -80,7 +80,7 @@ export class SupabaseApi {
     method: HttpMethod,
     resource: string,
     body: Record<string, unknown> | Record<string, unknown>[] = {},
-    qs: Record<string, string> = {},
+    qs: Record<string, string | string[]> = {},
     uri?: string,
     headers: Record<string, string> = {},
   ): Promise<ApiResult> {
@@ -88,7 +88,13 @@ export class SupabaseApi {
       const url = new URL(uri ?? `${this.config.host}/rest/v1${resource}`)
 
       for (const [key, value] of Object.entries(qs)) {
-        url.searchParams.set(key, value)
+        if (Array.isArray(value)) {
+          for (const v of value) {
+            url.searchParams.append(key, v)
+          }
+        } else {
+          url.searchParams.append(key, value)
+        }
       }
 
       const requestHeaders: Record<string, string> = {
