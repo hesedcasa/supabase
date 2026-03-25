@@ -263,6 +263,20 @@ describe('supabase-client', () => {
         expect(qs.age).to.equal('gt.18')
       })
 
+      it('collects duplicate keys as array for range filters on same column', async () => {
+        mockSupabaseApi.request.resolves({data: [], success: true})
+
+        await execute(mockConfig, {
+          filterMode: 'string',
+          filtersString: 'updated_at=gte.2026-03-16&updated_at=lt.2026-03-22',
+          operation: 'get',
+          tableId: 'events',
+        })
+
+        const qs = mockSupabaseApi.request.firstCall.args[3]
+        expect(qs.updated_at).to.deep.equal(['gte.2026-03-16', 'lt.2026-03-22'])
+      })
+
       it('includes select in query params when provided', async () => {
         mockSupabaseApi.request.resolves({data: [], success: true})
 

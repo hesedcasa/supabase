@@ -145,6 +145,16 @@ describe('SupabaseApi', () => {
       expect(url).to.include('offset=0')
     })
 
+    it('appends array qs values as repeated params for range filters', async () => {
+      fetchStub.resolves({json: stub().resolves([]), ok: true})
+
+      await api.request('GET', '/events', {}, {'updated_at': ['gte.2026-03-16', 'lt.2026-03-22']})
+
+      const [url] = fetchStub.firstCall.args
+      expect(url).to.include('updated_at=gte.2026-03-16')
+      expect(url).to.include('updated_at=lt.2026-03-22')
+    })
+
     it('uses custom uri when provided', async () => {
       fetchStub.resolves({json: stub().resolves([]), ok: true})
       const customUri = 'https://custom.example.com/endpoint'

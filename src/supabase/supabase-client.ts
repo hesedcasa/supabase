@@ -141,14 +141,19 @@ export async function execute(config: AuthConfig, options: ExecuteOptions): Prom
   const supabase = await initSupabase(config)
   const {filterMode, filters, filtersString, matchType, operation, schema, select, tableId} = options
 
-  const applyFilters = (qs: Record<string, string>): Record<string, string> => {
+  const applyFilters = (qs: Record<string, string | string[]>): Record<string, string | string[]> => {
     if (filterMode === 'string' && filtersString) {
       for (const part of filtersString.split('&')) {
         const eqIndex = part.indexOf('=')
         if (eqIndex !== -1) {
           const key = decodeURIComponent(part.slice(0, eqIndex))
           const val = decodeURIComponent(part.slice(eqIndex + 1))
-          qs[key] = val
+          if (key in qs) {
+            const existing = qs[key]
+            qs[key] = Array.isArray(existing) ? [...existing, val] : [existing, val]
+          } else {
+            qs[key] = val
+          }
         }
       }
     } else if (filters?.length && filters.length > 0) {
