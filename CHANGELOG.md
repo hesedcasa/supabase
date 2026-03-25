@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/hesedcasa/supabase/compare/v0.2.3...v0.2.4) (2026-03-25)
+
+
+### 🛠️ Fixes
+
+* support multiple filters on same column for timestamp range queries ([#18](https://github.com/hesedcasa/supabase/issues/18)) ([c170f79](https://github.com/hesedcasa/supabase/commit/c170f79f958978812286e38b897306aba787ddd6))
+
 ## [0.2.3](https://github.com/hesedcasa/supabase/compare/v0.2.2...v0.2.3) (2026-03-09)
 
 
