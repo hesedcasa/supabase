@@ -26,7 +26,7 @@ $ npm install -g @hesed/supabase
 $ spb COMMAND
 running command...
 $ spb (--version)
-@hesed/supabase/0.2.4 linux-x64 node-v20.20.1
+@hesed/supabase/0.3.0 linux-x64 node-v20.20.2
 $ spb --help [COMMAND]
 USAGE
   $ spb COMMAND
@@ -69,7 +69,7 @@ EXAMPLES
   $ spb supabase auth add
 ```
 
-_See code: [src/commands/supabase/auth/add.ts](https://github.com/hesedcasa/supabase/blob/v0.2.4/src/commands/supabase/auth/add.ts)_
+_See code: [src/commands/supabase/auth/add.ts](https://github.com/hesedcasa/supabase/blob/v0.3.0/src/commands/supabase/auth/add.ts)_
 
 ## `spb supabase auth test`
 
@@ -89,7 +89,7 @@ EXAMPLES
   $ spb supabase auth test
 ```
 
-_See code: [src/commands/supabase/auth/test.ts](https://github.com/hesedcasa/supabase/blob/v0.2.4/src/commands/supabase/auth/test.ts)_
+_See code: [src/commands/supabase/auth/test.ts](https://github.com/hesedcasa/supabase/blob/v0.3.0/src/commands/supabase/auth/test.ts)_
 
 ## `spb supabase auth update`
 
@@ -113,7 +113,7 @@ EXAMPLES
   $ spb supabase auth update
 ```
 
-_See code: [src/commands/supabase/auth/update.ts](https://github.com/hesedcasa/supabase/blob/v0.2.4/src/commands/supabase/auth/update.ts)_
+_See code: [src/commands/supabase/auth/update.ts](https://github.com/hesedcasa/supabase/blob/v0.3.0/src/commands/supabase/auth/update.ts)_
 
 ## `spb supabase create TABLE DATA`
 
@@ -145,7 +145,7 @@ EXAMPLES
   $ spb supabase create products '{"name":"Widget","price":9.99}' --select id,name
 ```
 
-_See code: [src/commands/supabase/create.ts](https://github.com/hesedcasa/supabase/blob/v0.2.4/src/commands/supabase/create.ts)_
+_See code: [src/commands/supabase/create.ts](https://github.com/hesedcasa/supabase/blob/v0.3.0/src/commands/supabase/create.ts)_
 
 ## `spb supabase delete TABLE`
 
@@ -188,7 +188,7 @@ FLAG DESCRIPTIONS
     full-text: fts.query, plfts.query, phfts.query, wfts.query
 ```
 
-_See code: [src/commands/supabase/delete.ts](https://github.com/hesedcasa/supabase/blob/v0.2.4/src/commands/supabase/delete.ts)_
+_See code: [src/commands/supabase/delete.ts](https://github.com/hesedcasa/supabase/blob/v0.3.0/src/commands/supabase/delete.ts)_
 
 ## `spb supabase query TABLE SELECT`
 
@@ -196,7 +196,7 @@ Execute query on Supabase database table
 
 ```
 USAGE
-  $ spb supabase query TABLE SELECT --filters <value> [--limit <value>] [--toon]
+  $ spb supabase query TABLE SELECT --filters <value> [--limit <value>] [--schema <value>] [--toon]
 
 ARGUMENTS
   TABLE   Table name
@@ -205,6 +205,7 @@ ARGUMENTS
 FLAGS
   --filters=<value>  (required) PostgREST filter string (e.g. "age=gte.18&status=eq.active")
   --limit=<value>    Max rows to return
+  --schema=<value>   PostgREST schema name
   --toon             Format output as toon
 
 DESCRIPTION
@@ -239,7 +240,7 @@ FLAG DESCRIPTIONS
     full-text: fts.query, plfts.query, phfts.query, wfts.query
 ```
 
-_See code: [src/commands/supabase/query.ts](https://github.com/hesedcasa/supabase/blob/v0.2.4/src/commands/supabase/query.ts)_
+_See code: [src/commands/supabase/query.ts](https://github.com/hesedcasa/supabase/blob/v0.3.0/src/commands/supabase/query.ts)_
 
 ## `spb supabase table-columns TABLE`
 
@@ -247,13 +248,14 @@ List all columns in a table in Supabase database
 
 ```
 USAGE
-  $ spb supabase table-columns TABLE [--toon]
+  $ spb supabase table-columns TABLE [--schema <value>] [--toon]
 
 ARGUMENTS
   TABLE  Table name to get columns
 
 FLAGS
-  --toon  Format output as toon
+  --schema=<value>  PostgREST schema name
+  --toon            Format output as toon
 
 DESCRIPTION
   List all columns in a table in Supabase database
@@ -262,7 +264,7 @@ EXAMPLES
   $ spb supabase table-columns
 ```
 
-_See code: [src/commands/supabase/table-columns.ts](https://github.com/hesedcasa/supabase/blob/v0.2.4/src/commands/supabase/table-columns.ts)_
+_See code: [src/commands/supabase/table-columns.ts](https://github.com/hesedcasa/supabase/blob/v0.3.0/src/commands/supabase/table-columns.ts)_
 
 ## `spb supabase tables`
 
@@ -270,10 +272,11 @@ List all tables in Supabase database
 
 ```
 USAGE
-  $ spb supabase tables [--toon]
+  $ spb supabase tables [--schema <value>] [--toon]
 
 FLAGS
-  --toon  Format output as toon
+  --schema=<value>  PostgREST schema name
+  --toon            Format output as toon
 
 DESCRIPTION
   List all tables in Supabase database
@@ -282,7 +285,7 @@ EXAMPLES
   $ spb supabase tables
 ```
 
-_See code: [src/commands/supabase/tables.ts](https://github.com/hesedcasa/supabase/blob/v0.2.4/src/commands/supabase/tables.ts)_
+_See code: [src/commands/supabase/tables.ts](https://github.com/hesedcasa/supabase/blob/v0.3.0/src/commands/supabase/tables.ts)_
 
 ## `spb supabase update TABLE DATA`
 
@@ -326,5 +329,5 @@ FLAG DESCRIPTIONS
     full-text: fts.query, plfts.query, phfts.query, wfts.query
 ```
 
-_See code: [src/commands/supabase/update.ts](https://github.com/hesedcasa/supabase/blob/v0.2.4/src/commands/supabase/update.ts)_
+_See code: [src/commands/supabase/update.ts](https://github.com/hesedcasa/supabase/blob/v0.3.0/src/commands/supabase/update.ts)_
 <!-- commandsstop -->
