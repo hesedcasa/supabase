@@ -11,6 +11,7 @@ export default class SupabaseTableColumns extends Command {
   static override description = 'List all columns in a table in Supabase database'
   static override examples = ['<%= config.bin %> <%= command.id %>']
   static override flags = {
+    schema: Flags.string({description: 'PostgREST schema name', required: false}),
     toon: Flags.boolean({description: 'Format output as toon', required: false}),
   }
 
@@ -21,7 +22,7 @@ export default class SupabaseTableColumns extends Command {
       return
     }
 
-    const result = await getTableColumns(config.auth, args.table)
+    const result = await getTableColumns(config.auth, args.table, flags.schema)
 
     if (flags.toon) {
       this.log(formatAsToon(result))

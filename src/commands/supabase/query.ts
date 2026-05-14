@@ -36,6 +36,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
       summary: 'PostgREST filter string (e.g. "age=gte.18&status=eq.active")',
     }),
     limit: Flags.integer({description: 'Max rows to return', required: false}),
+    schema: Flags.string({description: 'PostgREST schema name', required: false}),
     toon: Flags.boolean({description: 'Format output as toon', required: false}),
   }
 
@@ -51,6 +52,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
       filtersString: flags.filters,
       limit: flags.limit,
       operation: 'get',
+      schema: flags.schema,
       select: args.select,
       tableId: args.table,
     })
