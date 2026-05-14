@@ -49,9 +49,9 @@ async function initSupabase(config: AuthConfig): Promise<SupabaseApi> {
   }
 }
 
-export async function getTables(config: AuthConfig): Promise<ApiResult> {
+export async function getTables(config: AuthConfig, schema?: string): Promise<ApiResult> {
   const supabase = await initSupabase(config)
-  const result = await supabase.request('GET', '/')
+  const result = await supabase.request('GET', '/', {}, {}, undefined, supabase.getSchemaHeader('GET', schema))
 
   if (result.error || !result.data) {
     return result
@@ -74,9 +74,9 @@ export async function getTables(config: AuthConfig): Promise<ApiResult> {
   return result
 }
 
-export async function getTableColumns(config: AuthConfig, tableName: string): Promise<ApiResult> {
+export async function getTableColumns(config: AuthConfig, tableName: string, schema?: string): Promise<ApiResult> {
   const supabase = await initSupabase(config)
-  const result = await supabase.request('GET', '/')
+  const result = await supabase.request('GET', '/', {}, {}, undefined, supabase.getSchemaHeader('GET', schema))
 
   if (result.error) {
     return result

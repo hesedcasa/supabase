@@ -9,6 +9,7 @@ export default class SupabaseTables extends Command {
   static override description = 'List all tables in Supabase database'
   static override examples = ['<%= config.bin %> <%= command.id %>']
   static override flags = {
+    schema: Flags.string({description: 'PostgREST schema name', required: false}),
     toon: Flags.boolean({description: 'Format output as toon', required: false}),
   }
 
@@ -19,7 +20,7 @@ export default class SupabaseTables extends Command {
       return
     }
 
-    const result = await getTables(config.auth)
+    const result = await getTables(config.auth, flags.schema)
 
     if (flags.toon) {
       this.log(formatAsToon(result))
