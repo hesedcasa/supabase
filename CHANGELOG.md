@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/hesedcasa/supabase/compare/v0.2.4...v0.3.0) (2026-05-14)
+
+
+### 🎉 Features
+
+* add --schema flag to query, tables, and table-columns commands ([#42](https://github.com/hesedcasa/supabase/issues/42)) ([572e93a](https://github.com/hesedcasa/supabase/commit/572e93a5a95ea7e02fe6741a773a76359716dd21))
+
 ## [0.2.4](https://github.com/hesedcasa/supabase/compare/v0.2.3...v0.2.4) (2026-03-25)
 
 
