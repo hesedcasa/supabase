@@ -1,6 +1,9 @@
-import type {AuthConfig} from '../config.js'
-
 type HttpMethod = 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT'
+
+export type AuthConfig = {
+  apiToken: string
+  host: string
+}
 
 /**
  * Generic API result
@@ -40,6 +43,8 @@ export class SupabaseApi {
   constructor(config: AuthConfig) {
     this.config = config
   }
+
+  clearClients(): void {}
 
   buildGetQuery(obj: Record<string, string | string[]>, value: FilterCondition): Record<string, string | string[]> {
     return Object.assign(obj, {[value.keyName]: `eq.${value.keyValue}`})

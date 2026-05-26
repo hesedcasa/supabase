@@ -1,9 +1,10 @@
 import {Args, Command, Flags} from '@oclif/core'
 
-import type {IDataObject} from '../../supabase/supabase-api.js'
+import {createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 
-import {readConfig} from '../../config.js'
-import {formatAsToon} from '../../format.js'
+import type {IDataObject} from '../../supabase/supabase-api.js'
+import type {Config} from '../../supabase/supabase-client.js'
+
 import {execute} from '../../supabase/supabase-client.js'
 
 export default class SupabaseUpdate extends Command {
@@ -40,8 +41,10 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
 
   public async run(): Promise<void> {
     const {args, flags} = await this.parse(SupabaseUpdate)
-    const config = await readConfig(this.config.configDir, this.log.bind(this))
-    if (!config) {
+    const pm = createProfileManager<Config>(this.config)
+    const auth = pm.loadAuthConfig()
+    if (!auth) {
+      this.error('Not authenticated. Run spb auth add first.')
       return
     }
 
@@ -52,7 +55,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
       this.error('Invalid JSON for data argument')
     }
 
-    const result = await execute(config.auth, {
+    const result = await execute(auth, {
       data,
       filterMode: 'string',
       filtersString: flags.filters,

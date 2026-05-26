@@ -1,7 +1,9 @@
 import {Command, Flags} from '@oclif/core'
 
-import {readConfig} from '../../config.js'
-import {formatAsToon} from '../../format.js'
+import {createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+
+import type {Config} from '../../supabase/supabase-client.js'
+
 import {getTables} from '../../supabase/supabase-client.js'
 
 export default class SupabaseTables extends Command {
@@ -15,12 +17,14 @@ export default class SupabaseTables extends Command {
 
   public async run(): Promise<void> {
     const {flags} = await this.parse(SupabaseTables)
-    const config = await readConfig(this.config.configDir, this.log.bind(this))
-    if (!config) {
+    const pm = createProfileManager<Config>(this.config)
+    const auth = pm.loadAuthConfig()
+    if (!auth) {
+      this.error('Not authenticated. Run spb auth add first.')
       return
     }
 
-    const result = await getTables(config.auth, flags.schema)
+    const result = await getTables(auth, flags.schema)
 
     if (flags.toon) {
       this.log(formatAsToon(result))
