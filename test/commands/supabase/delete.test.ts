@@ -6,22 +6,23 @@ import {type SinonStub, stub} from 'sinon'
 describe('supabase:delete', () => {
   let SupabaseDelete: any
   let executeStub: SinonStub
-  let readConfigStub: SinonStub
+  let loadAuthConfigStub: SinonStub
   let formatAsToonStub: SinonStub
 
   const mockAuth = {apiToken: 'test-token', email: 'test@example.com', host: 'https://test.supabase.co'}
-  const mockConfig = {auth: mockAuth}
   const mockResult = {data: [{id: 42}], success: true}
 
   beforeEach(async () => {
     executeStub = stub().resolves(mockResult)
-    readConfigStub = stub().resolves(mockConfig)
+    loadAuthConfigStub = stub().resolves(mockAuth)
     formatAsToonStub = stub().returns('toon-output')
 
     const imported = await esmock('../../../src/commands/supabase/delete.js', {
-      '../../../src/config.js': {readConfig: readConfigStub},
-      '../../../src/format.js': {formatAsToon: formatAsToonStub},
       '../../../src/supabase/supabase-client.js': {execute: executeStub},
+      '@hesed/plugin-lib': {
+        createProfileManager: () => ({loadAuthConfig: loadAuthConfigStub}),
+        formatAsToon: formatAsToonStub,
+      },
     })
     SupabaseDelete = imported.default
   })
@@ -36,7 +37,7 @@ describe('supabase:delete', () => {
 
     await cmd.run()
 
-    expect(readConfigStub.calledOnce).to.be.true
+    expect(loadAuthConfigStub.calledOnce).to.be.true
     expect(executeStub.calledOnce).to.be.true
     const [authArg, optionsArg] = executeStub.firstCall.args
     expect(authArg).to.deep.equal(mockAuth)
@@ -101,8 +102,8 @@ describe('supabase:delete', () => {
     expect(executeStub.firstCall.args[1].filtersString).to.equal('status=eq.cancelled&created_at=lt.2024-01-01')
   })
 
-  it('returns early when config is missing', async () => {
-    readConfigStub.resolves()
+  it('throws error when config is missing', async () => {
+    loadAuthConfigStub.resolves()
 
     const cmd = new SupabaseDelete(['users', '--filters', 'id=eq.1'], {
       configDir: '/tmp/test-config',
@@ -110,7 +111,12 @@ describe('supabase:delete', () => {
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
 
-    await cmd.run()
+    try {
+      await cmd.run()
+      expect.fail('Should have thrown an error')
+    } catch (error: unknown) {
+      expect((error as Error).message).to.include('Not authenticated')
+    }
 
     expect(executeStub.called).to.be.false
   })

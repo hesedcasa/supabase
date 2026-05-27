@@ -1,9 +1,8 @@
+import {createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Args, Command, Flags} from '@oclif/core'
 
-import type {IDataObject} from '../../supabase/supabase-api.js'
+import type {AuthConfig, IDataObject} from '../../supabase/supabase-api.js'
 
-import {readConfig} from '../../config.js'
-import {formatAsToon} from '../../format.js'
 import {execute} from '../../supabase/supabase-client.js'
 
 export default class SupabaseCreate extends Command {
@@ -32,8 +31,9 @@ export default class SupabaseCreate extends Command {
 
   public async run(): Promise<void> {
     const {args, flags} = await this.parse(SupabaseCreate)
-    const config = await readConfig(this.config.configDir, this.log.bind(this))
-    if (!config) {
+    const pm = createProfileManager<AuthConfig>(this.config)
+    const auth = await pm.loadAuthConfig()
+    if (!auth) {
       return
     }
 
@@ -44,7 +44,7 @@ export default class SupabaseCreate extends Command {
       this.error('Invalid JSON for data argument')
     }
 
-    const result = await execute(config.auth, {
+    const result = await execute(auth, {
       data,
       operation: 'create',
       schema: flags.schema,
