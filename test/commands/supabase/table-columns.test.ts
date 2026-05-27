@@ -6,11 +6,10 @@ import {type SinonStub, stub} from 'sinon'
 describe('supabase:table-columns', () => {
   let SupabaseTableColumns: any
   let getTableColumnsStub: SinonStub
-  let readConfigStub: SinonStub
+  let loadAuthConfigStub: SinonStub
   let formatAsToonStub: SinonStub
 
   const mockAuth = {apiToken: 'test-token', email: 'test@example.com', host: 'https://test.supabase.co'}
-  const mockConfig = {auth: mockAuth}
   const mockResult = {
     data: {
       returnData: [
@@ -23,13 +22,15 @@ describe('supabase:table-columns', () => {
 
   beforeEach(async () => {
     getTableColumnsStub = stub().resolves(mockResult)
-    readConfigStub = stub().resolves(mockConfig)
+    loadAuthConfigStub = stub().resolves(mockAuth)
     formatAsToonStub = stub().returns('toon-output')
 
     const imported = await esmock('../../../src/commands/supabase/table-columns.js', {
-      '../../../src/config.js': {readConfig: readConfigStub},
-      '../../../src/format.js': {formatAsToon: formatAsToonStub},
       '../../../src/supabase/supabase-client.js': {getTableColumns: getTableColumnsStub},
+      '@hesed/plugin-lib': {
+        createProfileManager: () => ({loadAuthConfig: loadAuthConfigStub}),
+        formatAsToon: formatAsToonStub,
+      },
     })
     SupabaseTableColumns = imported.default
   })
@@ -44,7 +45,7 @@ describe('supabase:table-columns', () => {
 
     await cmd.run()
 
-    expect(readConfigStub.calledOnce).to.be.true
+    expect(loadAuthConfigStub.calledOnce).to.be.true
     expect(getTableColumnsStub.calledOnce).to.be.true
     expect(getTableColumnsStub.firstCall.args[0]).to.deep.equal(mockAuth)
     expect(getTableColumnsStub.firstCall.args[1]).to.equal('users')
@@ -80,8 +81,8 @@ describe('supabase:table-columns', () => {
     expect(getTableColumnsStub.firstCall.args[1]).to.equal('orders')
   })
 
-  it('returns early when config is missing', async () => {
-    readConfigStub.resolves()
+  it('throws error when config is missing', async () => {
+    loadAuthConfigStub.resolves()
 
     const cmd = new SupabaseTableColumns(['users'], {
       configDir: '/tmp/test-config',
@@ -89,7 +90,12 @@ describe('supabase:table-columns', () => {
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
 
-    await cmd.run()
+    try {
+      await cmd.run()
+      expect.fail('Should have thrown an error')
+    } catch (error: unknown) {
+      expect((error as Error).message).to.include('Not authenticated')
+    }
 
     expect(getTableColumnsStub.called).to.be.false
   })

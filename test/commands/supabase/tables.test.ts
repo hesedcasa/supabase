@@ -6,11 +6,10 @@ import {type SinonStub, stub} from 'sinon'
 describe('supabase:tables', () => {
   let SupabaseTables: any
   let getTablesStub: SinonStub
-  let readConfigStub: SinonStub
+  let loadAuthConfigStub: SinonStub
   let formatAsToonStub: SinonStub
 
   const mockAuth = {apiToken: 'test-token', email: 'test@example.com', host: 'https://test.supabase.co'}
-  const mockConfig = {auth: mockAuth}
   const mockResult = {
     data: {
       returnData: [
@@ -23,13 +22,15 @@ describe('supabase:tables', () => {
 
   beforeEach(async () => {
     getTablesStub = stub().resolves(mockResult)
-    readConfigStub = stub().resolves(mockConfig)
+    loadAuthConfigStub = stub().resolves(mockAuth)
     formatAsToonStub = stub().returns('toon-output')
 
     const imported = await esmock('../../../src/commands/supabase/tables.js', {
-      '../../../src/config.js': {readConfig: readConfigStub},
-      '../../../src/format.js': {formatAsToon: formatAsToonStub},
       '../../../src/supabase/supabase-client.js': {getTables: getTablesStub},
+      '@hesed/plugin-lib': {
+        createProfileManager: () => ({loadAuthConfig: loadAuthConfigStub}),
+        formatAsToon: formatAsToonStub,
+      },
     })
     SupabaseTables = imported.default
   })
@@ -44,7 +45,7 @@ describe('supabase:tables', () => {
 
     await cmd.run()
 
-    expect(readConfigStub.calledOnce).to.be.true
+    expect(loadAuthConfigStub.calledOnce).to.be.true
     expect(getTablesStub.calledOnce).to.be.true
     expect(getTablesStub.firstCall.args[0]).to.deep.equal(mockAuth)
     expect(logJsonStub.calledOnce).to.be.true
@@ -65,8 +66,8 @@ describe('supabase:tables', () => {
     expect(logStub.calledWith('toon-output')).to.be.true
   })
 
-  it('returns early when config is missing', async () => {
-    readConfigStub.resolves()
+  it('throws error when config is missing', async () => {
+    loadAuthConfigStub.resolves()
 
     const cmd = new SupabaseTables([], {
       configDir: '/tmp/test-config',
@@ -74,7 +75,12 @@ describe('supabase:tables', () => {
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
 
-    await cmd.run()
+    try {
+      await cmd.run()
+      expect.fail('Should have thrown an error')
+    } catch (error: unknown) {
+      expect((error as Error).message).to.include('Not authenticated')
+    }
 
     expect(getTablesStub.called).to.be.false
   })

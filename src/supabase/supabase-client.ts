@@ -1,6 +1,6 @@
 import {createApiClient} from '@hesed/plugin-lib'
 
-import type {ApiResult, FilterCondition, IDataObject} from './supabase-api.js'
+import type {ApiResult, AuthConfig, FilterCondition, IDataObject} from './supabase-api.js'
 
 import {SupabaseApi} from './supabase-api.js'
 
@@ -33,20 +33,12 @@ interface ExecuteOptions {
   tableId: string
 }
 
-export type Config = {
-  apiToken: string
-  host: string
-}
+const {clearClients, getClient} = createApiClient('Supabase', (config: AuthConfig) => new SupabaseApi(config))
 
-const {clearClients, getClient} = createApiClient<Config, SupabaseApi>(
-  'Supabase',
-  (config: Config) => new SupabaseApi(config),
-)
+export {clearClients}
 
-export {clearClients, getClient}
-
-export async function getTables(config: Config, schema?: string): Promise<ApiResult> {
-  const supabase = getClient(config)
+export async function getTables(config: AuthConfig, schema?: string): Promise<ApiResult> {
+  const supabase = await getClient(config)
   const result = await supabase.request('GET', '/', {}, {}, undefined, supabase.getSchemaHeader('GET', schema))
 
   if (result.error || !result.data) {
@@ -70,8 +62,8 @@ export async function getTables(config: Config, schema?: string): Promise<ApiRes
   return result
 }
 
-export async function getTableColumns(config: Config, tableName: string, schema?: string): Promise<ApiResult> {
-  const supabase = getClient(config)
+export async function getTableColumns(config: AuthConfig, tableName: string, schema?: string): Promise<ApiResult> {
+  const supabase = await getClient(config)
   const result = await supabase.request('GET', '/', {}, {}, undefined, supabase.getSchemaHeader('GET', schema))
 
   if (result.error) {
@@ -114,8 +106,8 @@ export async function getTableColumns(config: Config, tableName: string, schema?
  * Test Supabase API connection
  * @param config - Supabase configuration
  */
-export async function testConnection(config: Config): Promise<ApiResult> {
-  const supabase = getClient(config)
+export async function testConnection(config: AuthConfig): Promise<ApiResult> {
+  const supabase = await getClient(config)
   return supabase.validateCredentials()
 }
 
@@ -133,8 +125,8 @@ export async function testConnection(config: Config): Promise<ApiResult> {
  * @param config - Supabase API credentials
  * @param options - Operation parameters
  */
-export async function execute(config: Config, options: ExecuteOptions): Promise<ApiResult> {
-  const supabase = getClient(config)
+export async function execute(config: AuthConfig, options: ExecuteOptions): Promise<ApiResult> {
+  const supabase = await getClient(config)
   const {filterMode, filters, filtersString, matchType, operation, schema, select, tableId} = options
 
   const applyFilters = (qs: Record<string, string | string[]>): Record<string, string | string[]> => {

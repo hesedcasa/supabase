@@ -2,6 +2,7 @@ type HttpMethod = 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT'
 
 export type AuthConfig = {
   apiToken: string
+  email: string
   host: string
 }
 
@@ -44,8 +45,6 @@ export class SupabaseApi {
     this.config = config
   }
 
-  clearClients(): void {}
-
   buildGetQuery(obj: Record<string, string | string[]>, value: FilterCondition): Record<string, string | string[]> {
     return Object.assign(obj, {[value.keyName]: `eq.${value.keyValue}`})
   }
@@ -65,6 +64,8 @@ export class SupabaseApi {
 
     return Object.assign(obj, {[value.keyName]: `${value.condition}.${value.keyValue}`})
   }
+
+  clearClients(): void {}
 
   getSchemaHeader(method: HttpMethod, schema?: string): Record<string, string> {
     if (!schema) return {}

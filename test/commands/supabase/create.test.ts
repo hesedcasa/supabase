@@ -6,22 +6,23 @@ import {type SinonStub, stub} from 'sinon'
 describe('supabase:create', () => {
   let SupabaseCreate: any
   let executeStub: SinonStub
-  let readConfigStub: SinonStub
+  let loadAuthConfigStub: SinonStub
   let formatAsToonStub: SinonStub
 
   const mockAuth = {apiToken: 'test-token', email: 'test@example.com', host: 'https://test.supabase.co'}
-  const mockConfig = {auth: mockAuth}
   const mockResult = {data: [{id: 1, name: 'Alice'}], success: true}
 
   beforeEach(async () => {
     executeStub = stub().resolves(mockResult)
-    readConfigStub = stub().resolves(mockConfig)
+    loadAuthConfigStub = stub().resolves(mockAuth)
     formatAsToonStub = stub().returns('toon-output')
 
     const imported = await esmock('../../../src/commands/supabase/create.js', {
-      '../../../src/config.js': {readConfig: readConfigStub},
-      '../../../src/format.js': {formatAsToon: formatAsToonStub},
       '../../../src/supabase/supabase-client.js': {execute: executeStub},
+      '@hesed/plugin-lib': {
+        createProfileManager: () => ({loadAuthConfig: loadAuthConfigStub}),
+        formatAsToon: formatAsToonStub,
+      },
     })
     SupabaseCreate = imported.default
   })
@@ -36,7 +37,7 @@ describe('supabase:create', () => {
 
     await cmd.run()
 
-    expect(readConfigStub.calledOnce).to.be.true
+    expect(loadAuthConfigStub.calledOnce).to.be.true
     expect(executeStub.calledOnce).to.be.true
     const [authArg, optionsArg] = executeStub.firstCall.args
     expect(authArg).to.deep.equal(mockAuth)
@@ -118,7 +119,7 @@ describe('supabase:create', () => {
   })
 
   it('returns early when config is missing', async () => {
-    readConfigStub.resolves()
+    loadAuthConfigStub.resolves()
 
     const cmd = new SupabaseCreate(['users', '{"name":"Alice"}'], {
       configDir: '/tmp/test-config',

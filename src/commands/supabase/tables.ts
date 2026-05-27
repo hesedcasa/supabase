@@ -1,8 +1,7 @@
+import {createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Command, Flags} from '@oclif/core'
 
-import {createProfileManager, formatAsToon} from '@hesed/plugin-lib'
-
-import type {Config} from '../../supabase/supabase-client.js'
+import type {AuthConfig} from '../../supabase/supabase-api.js'
 
 import {getTables} from '../../supabase/supabase-client.js'
 
@@ -17,8 +16,8 @@ export default class SupabaseTables extends Command {
 
   public async run(): Promise<void> {
     const {flags} = await this.parse(SupabaseTables)
-    const pm = createProfileManager<Config>(this.config)
-    const auth = pm.loadAuthConfig()
+    const pm = createProfileManager<AuthConfig>(this.config)
+    const auth = await pm.loadAuthConfig()
     if (!auth) {
       this.error('Not authenticated. Run spb auth add first.')
       return
