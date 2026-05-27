@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/hesedcasa/supabase/compare/v0.3.0...v0.4.0) (2026-05-27)
+
+
+### 🎉 Features
+
+* integrate @hesed/plugin-lib with multi-profile auth support ([#48](https://github.com/hesedcasa/supabase/issues/48)) ([e4e83fe](https://github.com/hesedcasa/supabase/commit/e4e83fe7592964d2645ccdcd906ca41e91710ef5))
+
 ## [0.3.0](https://github.com/hesedcasa/supabase/compare/v0.2.4...v0.3.0) (2026-05-14)
 
 
