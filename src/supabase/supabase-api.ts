@@ -1,19 +1,6 @@
+import {type ApiResult, type AuthConfig} from '@hesed/plugin-lib'
+
 type HttpMethod = 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT'
-
-export type AuthConfig = {
-  apiToken: string
-  email: string
-  host: string
-}
-
-/**
- * Generic API result
- */
-export interface ApiResult {
-  data?: IDataObject
-  error?: unknown
-  success: boolean
-}
 
 /**
  * Generic data object for node parameters and data.

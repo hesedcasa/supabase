@@ -1,6 +1,6 @@
-import {createApiClient} from '@hesed/plugin-lib'
+import {type ApiResult, type AuthConfig, createApiClient} from '@hesed/plugin-lib'
 
-import type {ApiResult, AuthConfig, FilterCondition, IDataObject} from './supabase-api.js'
+import type {FilterCondition, IDataObject} from './supabase-api.js'
 
 import {SupabaseApi} from './supabase-api.js'
 
