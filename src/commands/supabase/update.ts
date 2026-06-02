@@ -1,9 +1,7 @@
 import {type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Args, Command, Flags} from '@oclif/core'
 
-import type {IDataObject} from '../../supabase/supabase-api.js'
-
-import {execute} from '../../supabase/supabase-client.js'
+import {execute, type IDataObject} from '../../supabase/supabase-client.js'
 
 export default class SupabaseUpdate extends Command {
   /* eslint-disable perfectionist/sort-objects */

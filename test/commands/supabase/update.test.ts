@@ -135,7 +135,7 @@ describe('supabase:update', () => {
       await cmd.run()
       expect.fail('Should have thrown an error')
     } catch (error: unknown) {
-      expect((error as Error).message).to.include('Not authenticated')
+      expect((error as Error).message).to.include('Missing authentication config.')
     }
 
     expect(executeStub.called).to.be.false

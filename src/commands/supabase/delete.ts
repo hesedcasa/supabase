@@ -1,5 +1,5 @@
 import {type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
-import { Args, Command, Flags } from '@oclif/core'
+import {Args, Command, Flags} from '@oclif/core'
 
 import {execute} from '../../supabase/supabase-client.js'
 
