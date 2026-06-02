@@ -1,12 +1,28 @@
-import {createApiClient} from '@hesed/plugin-lib'
+import {type ApiResult, type AuthConfig, createApiClient} from '@hesed/plugin-lib'
 
-import type {ApiResult, AuthConfig, FilterCondition, IDataObject} from './supabase-api.js'
+import type {FilterCondition} from './supabase-api.js'
 
 import {SupabaseApi} from './supabase-api.js'
 
 type FilterMode = 'manual' | 'string'
 type MatchType = 'allFilters' | 'anyFilter'
 type RowOperation = 'create' | 'delete' | 'get' | 'getAll' | 'update'
+
+/**
+ * Generic data object for node parameters and data.
+ * Supports nested objects and arrays.
+ */
+export interface IDataObject {
+  [key: string]:
+    | Array<boolean | IDataObject | null | number | object | string>
+    | boolean
+    | IDataObject
+    | null
+    | number
+    | object
+    | string
+    | undefined
+}
 
 interface ExecuteOptions {
   /** Record(s) to insert or update */
@@ -46,7 +62,7 @@ export async function getTables(config: AuthConfig, schema?: string): Promise<Ap
   }
 
   const returnData = []
-  const {paths} = result.data
+  const {paths} = result.data as IDataObject
 
   for (const path of Object.keys(paths as IDataObject)) {
     // omit introspection path
@@ -75,7 +91,7 @@ export async function getTableColumns(config: AuthConfig, tableName: string, sch
   }
 
   const returnData = []
-  const {definitions} = result.data
+  const {definitions} = result.data as IDataObject
 
   if (
     !definitions ||

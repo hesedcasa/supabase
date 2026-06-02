@@ -118,7 +118,7 @@ describe('supabase:create', () => {
     expect(executeStub.called).to.be.false
   })
 
-  it('returns early when config is missing', async () => {
+  it('throws error when config is missing', async () => {
     loadAuthConfigStub.resolves()
 
     const cmd = new SupabaseCreate(['users', '{"name":"Alice"}'], {
@@ -127,7 +127,12 @@ describe('supabase:create', () => {
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
 
-    await cmd.run()
+    try {
+      await cmd.run()
+      expect.fail('Should have thrown an error')
+    } catch (error: unknown) {
+      expect((error as Error).message).to.include('Missing authentication config.')
+    }
 
     expect(executeStub.called).to.be.false
   })

@@ -1,9 +1,7 @@
-import {createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Args, Command, Flags} from '@oclif/core'
 
-import type {AuthConfig, IDataObject} from '../../supabase/supabase-api.js'
-
-import {execute} from '../../supabase/supabase-client.js'
+import {execute, type IDataObject} from '../../supabase/supabase-client.js'
 
 export default class SupabaseUpdate extends Command {
   /* eslint-disable perfectionist/sort-objects */
@@ -42,8 +40,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
     const pm = createProfileManager<AuthConfig>(this.config)
     const auth = await pm.loadAuthConfig()
     if (!auth) {
-      this.error('Not authenticated. Run spb auth add first.')
-      return
+      this.error(`Missing authentication config.`)
     }
 
     let data: IDataObject

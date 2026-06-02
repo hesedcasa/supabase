@@ -1,7 +1,5 @@
-import {createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Command, Flags} from '@oclif/core'
-
-import type {AuthConfig} from '../../supabase/supabase-api.js'
 
 import {getTables} from '../../supabase/supabase-client.js'
 
@@ -19,8 +17,7 @@ export default class SupabaseTables extends Command {
     const pm = createProfileManager<AuthConfig>(this.config)
     const auth = await pm.loadAuthConfig()
     if (!auth) {
-      this.error('Not authenticated. Run spb auth add first.')
-      return
+      this.error(`Missing authentication config.`)
     }
 
     const result = await getTables(auth, flags.schema)
