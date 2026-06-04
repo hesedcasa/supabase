@@ -26,7 +26,7 @@ $ npm install -g @hesed/supabase
 $ spb COMMAND
 running command...
 $ spb (--version)
-@hesed/supabase/0.4.0 linux-x64 node-v22.22.3
+@hesed/supabase/0.5.0 linux-x64 node-v22.22.3
 $ spb --help [COMMAND]
 USAGE
   $ spb COMMAND
@@ -56,13 +56,13 @@ Add Supabase authentication
 
 ```
 USAGE
-  $ spb supabase auth add -t <value> -u <value> [--json] [-e <value>] [-p <value>]
+  $ spb supabase auth add -p <value> -t <value> -e <value> -u <value> [--json]
 
 FLAGS
-  -e, --email=<value>    Account email
-  -p, --profile=<value>  Profile name
-  -t, --token=<value>    (required) API Token
-  -u, --url=<value>      (required) Supabase instance URL (start with https://)
+  -e, --email=<value>     (required) Account email
+  -p, --profile=<value>   (required) Profile name
+  -t, --apiToken=<value>  (required) API Token
+  -u, --host=<value>      (required) Supabase instance URL
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -73,10 +73,10 @@ DESCRIPTION
 EXAMPLES
   $ spb supabase auth add
 
-  $ spb supabase auth add --profile work
+  $ spb supabase auth add -p prod
 ```
 
-_See code: [src/commands/supabase/auth/add.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/auth/add.ts)_
+_See code: [src/commands/supabase/auth/add.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/auth/add.ts)_
 
 ## `spb supabase auth delete`
 
@@ -87,7 +87,7 @@ USAGE
   $ spb supabase auth delete [--json] [-p <value>]
 
 FLAGS
-  -p, --profile=<value>  Profile name to delete
+  -p, --profile=<value>  Profile to delete
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -98,10 +98,10 @@ DESCRIPTION
 EXAMPLES
   $ spb supabase auth delete
 
-  $ spb supabase auth delete --profile work
+  $ spb supabase auth delete -p prod
 ```
 
-_See code: [src/commands/supabase/auth/delete.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/auth/delete.ts)_
+_See code: [src/commands/supabase/auth/delete.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/auth/delete.ts)_
 
 ## `spb supabase auth list`
 
@@ -121,7 +121,7 @@ EXAMPLES
   $ spb supabase auth list
 ```
 
-_See code: [src/commands/supabase/auth/list.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/auth/list.ts)_
+_See code: [src/commands/supabase/auth/list.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/auth/list.ts)_
 
 ## `spb supabase auth profile`
 
@@ -132,7 +132,7 @@ USAGE
   $ spb supabase auth profile [--json] [--default <value>]
 
 FLAGS
-  --default=<value>  Profile name to set as default
+  --default=<value>  Profile to set as default
 
 GLOBAL FLAGS
   --json  Format output as json.
@@ -143,10 +143,10 @@ DESCRIPTION
 EXAMPLES
   $ spb supabase auth profile
 
-  $ spb supabase auth profile --default work
+  $ spb supabase auth profile --default test
 ```
 
-_See code: [src/commands/supabase/auth/profile.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/auth/profile.ts)_
+_See code: [src/commands/supabase/auth/profile.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/auth/profile.ts)_
 
 ## `spb supabase auth test`
 
@@ -168,38 +168,38 @@ DESCRIPTION
 EXAMPLES
   $ spb supabase auth test
 
-  $ spb supabase auth test --profile work
+  $ spb supabase auth test -p prod
 ```
 
-_See code: [src/commands/supabase/auth/test.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/auth/test.ts)_
+_See code: [src/commands/supabase/auth/test.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/auth/test.ts)_
 
 ## `spb supabase auth update`
 
-Update existing authentication profile
+Update Supabase authentication
 
 ```
 USAGE
-  $ spb supabase auth update -t <value> -u <value> [--json] [-e <value>] [-p <value>]
+  $ spb supabase auth update -p <value> -t <value> -e <value> -u <value> [--json]
 
 FLAGS
-  -e, --email=<value>    Account email
-  -p, --profile=<value>  Profile name to update (default: "default")
-  -t, --token=<value>    (required) API Token
-  -u, --url=<value>      (required) Supabase instance URL (start with https://)
+  -e, --email=<value>     (required) Account email
+  -p, --profile=<value>   (required) Profile name
+  -t, --apiToken=<value>  (required) API Token
+  -u, --host=<value>      (required) Supabase instance URL
 
 GLOBAL FLAGS
   --json  Format output as json.
 
 DESCRIPTION
-  Update existing authentication profile
+  Update Supabase authentication
 
 EXAMPLES
   $ spb supabase auth update
 
-  $ spb supabase auth update --profile work
+  $ spb supabase auth update -p test
 ```
 
-_See code: [src/commands/supabase/auth/update.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/auth/update.ts)_
+_See code: [src/commands/supabase/auth/update.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/auth/update.ts)_
 
 ## `spb supabase create TABLE DATA`
 
@@ -231,7 +231,7 @@ EXAMPLES
   $ spb supabase create products '{"name":"Widget","price":9.99}' --select id,name
 ```
 
-_See code: [src/commands/supabase/create.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/create.ts)_
+_See code: [src/commands/supabase/create.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/create.ts)_
 
 ## `spb supabase delete TABLE`
 
@@ -274,7 +274,7 @@ FLAG DESCRIPTIONS
     full-text: fts.query, plfts.query, phfts.query, wfts.query
 ```
 
-_See code: [src/commands/supabase/delete.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/delete.ts)_
+_See code: [src/commands/supabase/delete.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/delete.ts)_
 
 ## `spb supabase query TABLE SELECT`
 
@@ -326,7 +326,7 @@ FLAG DESCRIPTIONS
     full-text: fts.query, plfts.query, phfts.query, wfts.query
 ```
 
-_See code: [src/commands/supabase/query.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/query.ts)_
+_See code: [src/commands/supabase/query.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/query.ts)_
 
 ## `spb supabase table-columns TABLE`
 
@@ -350,7 +350,7 @@ EXAMPLES
   $ spb supabase table-columns
 ```
 
-_See code: [src/commands/supabase/table-columns.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/table-columns.ts)_
+_See code: [src/commands/supabase/table-columns.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/table-columns.ts)_
 
 ## `spb supabase tables`
 
@@ -371,7 +371,7 @@ EXAMPLES
   $ spb supabase tables
 ```
 
-_See code: [src/commands/supabase/tables.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/tables.ts)_
+_See code: [src/commands/supabase/tables.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/tables.ts)_
 
 ## `spb supabase update TABLE DATA`
 
@@ -415,5 +415,5 @@ FLAG DESCRIPTIONS
     full-text: fts.query, plfts.query, phfts.query, wfts.query
 ```
 
-_See code: [src/commands/supabase/update.ts](https://github.com/hesedcasa/supabase/blob/v0.4.0/src/commands/supabase/update.ts)_
+_See code: [src/commands/supabase/update.ts](https://github.com/hesedcasa/supabase/blob/v0.5.0/src/commands/supabase/update.ts)_
 <!-- commandsstop -->
