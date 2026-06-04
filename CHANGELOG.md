@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/hesedcasa/supabase/compare/v0.4.0...v0.5.0) (2026-06-04)
+
+
+### 🎉 Features
+
+* upgrade @hesed/plugin-lib to 0.7.0 and migrate shared types ([#50](https://github.com/hesedcasa/supabase/issues/50)) ([b3f5eed](https://github.com/hesedcasa/supabase/commit/b3f5eed18ff5e9788879f343642ef02ca0e83ab6))
+* upgrade @hesed/plugin-lib to 0.9.0 and pass configFile to auth commands ([65268ad](https://github.com/hesedcasa/supabase/commit/65268add981679ea66a88966cc676ceb0bcae7aa))
+
 ## [0.4.0](https://github.com/hesedcasa/supabase/compare/v0.3.0...v0.4.0) (2026-05-27)
 
 
