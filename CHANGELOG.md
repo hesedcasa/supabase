@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/hesedcasa/supabase/compare/v0.5.0...v0.6.0) (2026-06-05)
+
+
+### 🎉 Features
+
+* support auth profiles on supabase commands ([#56](https://github.com/hesedcasa/supabase/issues/56)) ([5d003f2](https://github.com/hesedcasa/supabase/commit/5d003f293c0895101b7668a9c40a09367379676d))
+
 ## [0.5.0](https://github.com/hesedcasa/supabase/compare/v0.4.0...v0.5.0) (2026-06-04)
 
 
