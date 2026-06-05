@@ -27,6 +27,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
       required: true,
       summary: 'PostgREST filter string (e.g. "id=eq.42")',
     }),
+    profile: Flags.string({char: 'p', description: 'Authentication profile name', required: false}),
     schema: Flags.string({description: 'PostgREST schema name', required: false}),
     select: Flags.string({description: 'Comma-separated columns to return after delete', required: false}),
     toon: Flags.boolean({description: 'Format output as toon', required: false}),
@@ -34,7 +35,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
 
   public async run(): Promise<void> {
     const {args, flags} = await this.parse(SupabaseDelete)
-    const pm = createProfileManager<AuthConfig>(this.config)
+    const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
     if (!auth) {
       this.error(`Missing authentication config.`)

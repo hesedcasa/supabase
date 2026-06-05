@@ -10,13 +10,14 @@ export default class SupabaseTableColumns extends Command {
   static override description = 'List all columns in a table in Supabase database'
   static override examples = ['<%= config.bin %> <%= command.id %>']
   static override flags = {
+    profile: Flags.string({char: 'p', description: 'Authentication profile name', required: false}),
     schema: Flags.string({description: 'PostgREST schema name', required: false}),
     toon: Flags.boolean({description: 'Format output as toon', required: false}),
   }
 
   public async run(): Promise<void> {
     const {args, flags} = await this.parse(SupabaseTableColumns)
-    const pm = createProfileManager<AuthConfig>(this.config)
+    const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
     if (!auth) {
       this.error(`Missing authentication config.`)

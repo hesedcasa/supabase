@@ -8,6 +8,7 @@ describe('supabase:table-columns', () => {
   let getTableColumnsStub: SinonStub
   let loadAuthConfigStub: SinonStub
   let formatAsToonStub: SinonStub
+  let createProfileManagerStub: SinonStub
 
   const mockAuth = {apiToken: 'test-token', email: 'test@example.com', host: 'https://test.supabase.co'}
   const mockResult = {
@@ -24,11 +25,12 @@ describe('supabase:table-columns', () => {
     getTableColumnsStub = stub().resolves(mockResult)
     loadAuthConfigStub = stub().resolves(mockAuth)
     formatAsToonStub = stub().returns('toon-output')
+    createProfileManagerStub = stub().returns({loadAuthConfig: loadAuthConfigStub})
 
     const imported = await esmock('../../../src/commands/supabase/table-columns.js', {
       '../../../src/supabase/supabase-client.js': {getTableColumns: getTableColumnsStub},
       '@hesed/plugin-lib': {
-        createProfileManager: () => ({loadAuthConfig: loadAuthConfigStub}),
+        createProfileManager: createProfileManagerStub,
         formatAsToon: formatAsToonStub,
       },
     })
@@ -79,6 +81,20 @@ describe('supabase:table-columns', () => {
     await cmd.run()
 
     expect(getTableColumnsStub.firstCall.args[1]).to.equal('orders')
+  })
+
+  it('loads the requested authentication profile', async () => {
+    const cmd = new SupabaseTableColumns(['users', '--profile', 'prod'], {
+      configDir: '/tmp/test-config',
+      root: process.cwd(),
+      runHook: stub().resolves({failures: [], successes: []}),
+    } as any)
+    stub(cmd, 'logJson')
+
+    await cmd.run()
+
+    expect(createProfileManagerStub.firstCall.args[1]).to.equal('prod')
+    expect(createProfileManagerStub.firstCall.args[2]).to.equal('spb-config.json')
   })
 
   it('throws error when config is missing', async () => {

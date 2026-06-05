@@ -8,6 +8,7 @@ describe('supabase:tables', () => {
   let getTablesStub: SinonStub
   let loadAuthConfigStub: SinonStub
   let formatAsToonStub: SinonStub
+  let createProfileManagerStub: SinonStub
 
   const mockAuth = {apiToken: 'test-token', email: 'test@example.com', host: 'https://test.supabase.co'}
   const mockResult = {
@@ -24,11 +25,12 @@ describe('supabase:tables', () => {
     getTablesStub = stub().resolves(mockResult)
     loadAuthConfigStub = stub().resolves(mockAuth)
     formatAsToonStub = stub().returns('toon-output')
+    createProfileManagerStub = stub().returns({loadAuthConfig: loadAuthConfigStub})
 
     const imported = await esmock('../../../src/commands/supabase/tables.js', {
       '../../../src/supabase/supabase-client.js': {getTables: getTablesStub},
       '@hesed/plugin-lib': {
-        createProfileManager: () => ({loadAuthConfig: loadAuthConfigStub}),
+        createProfileManager: createProfileManagerStub,
         formatAsToon: formatAsToonStub,
       },
     })
@@ -64,6 +66,20 @@ describe('supabase:tables', () => {
 
     expect(formatAsToonStub.calledOnce).to.be.true
     expect(logStub.calledWith('toon-output')).to.be.true
+  })
+
+  it('loads the requested authentication profile', async () => {
+    const cmd = new SupabaseTables(['--profile', 'prod'], {
+      configDir: '/tmp/test-config',
+      root: process.cwd(),
+      runHook: stub().resolves({failures: [], successes: []}),
+    } as any)
+    stub(cmd, 'logJson')
+
+    await cmd.run()
+
+    expect(createProfileManagerStub.firstCall.args[1]).to.equal('prod')
+    expect(createProfileManagerStub.firstCall.args[2]).to.equal('spb-config.json')
   })
 
   it('throws error when config is missing', async () => {
