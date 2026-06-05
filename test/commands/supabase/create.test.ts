@@ -8,6 +8,7 @@ describe('supabase:create', () => {
   let executeStub: SinonStub
   let loadAuthConfigStub: SinonStub
   let formatAsToonStub: SinonStub
+  let createProfileManagerStub: SinonStub
 
   const mockAuth = {apiToken: 'test-token', email: 'test@example.com', host: 'https://test.supabase.co'}
   const mockResult = {data: [{id: 1, name: 'Alice'}], success: true}
@@ -16,11 +17,12 @@ describe('supabase:create', () => {
     executeStub = stub().resolves(mockResult)
     loadAuthConfigStub = stub().resolves(mockAuth)
     formatAsToonStub = stub().returns('toon-output')
+    createProfileManagerStub = stub().returns({loadAuthConfig: loadAuthConfigStub})
 
     const imported = await esmock('../../../src/commands/supabase/create.js', {
       '../../../src/supabase/supabase-client.js': {execute: executeStub},
       '@hesed/plugin-lib': {
-        createProfileManager: () => ({loadAuthConfig: loadAuthConfigStub}),
+        createProfileManager: createProfileManagerStub,
         formatAsToon: formatAsToonStub,
       },
     })
@@ -100,6 +102,20 @@ describe('supabase:create', () => {
     await cmd.run()
 
     expect(executeStub.firstCall.args[1].schema).to.equal('custom')
+  })
+
+  it('loads the requested authentication profile', async () => {
+    const cmd = new SupabaseCreate(['users', '{"name":"Alice"}', '--profile', 'prod'], {
+      configDir: '/tmp/test-config',
+      root: process.cwd(),
+      runHook: stub().resolves({failures: [], successes: []}),
+    } as any)
+    stub(cmd, 'logJson')
+
+    await cmd.run()
+
+    expect(createProfileManagerStub.firstCall.args[1]).to.equal('prod')
+    expect(createProfileManagerStub.firstCall.args[2]).to.equal('spb-config.json')
   })
 
   it('does not call execute for invalid JSON data', async () => {
