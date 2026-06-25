@@ -37,22 +37,20 @@ describe('supabase:table-columns', () => {
     SupabaseTableColumns = imported.default
   })
 
-  it('lists columns for a table and logs JSON result', async () => {
+  it('lists columns for a table and returns result', async () => {
     const cmd = new SupabaseTableColumns(['users'], {
       configDir: '/tmp/test-config',
       root: process.cwd(),
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
-    const logJsonStub = stub(cmd, 'logJson')
 
-    await cmd.run()
+    const result = await cmd.run()
 
     expect(loadAuthConfigStub.calledOnce).to.be.true
     expect(getTableColumnsStub.calledOnce).to.be.true
     expect(getTableColumnsStub.firstCall.args[0]).to.deep.equal(mockAuth)
     expect(getTableColumnsStub.firstCall.args[1]).to.equal('users')
-    expect(logJsonStub.calledOnce).to.be.true
-    expect(logJsonStub.firstCall.args[0]).to.deep.equal(mockResult)
+    expect(result).to.deep.equal(mockResult)
   })
 
   it('uses --toon flag and logs toon output', async () => {
@@ -76,8 +74,6 @@ describe('supabase:table-columns', () => {
       root: process.cwd(),
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
-    stub(cmd, 'logJson')
-
     await cmd.run()
 
     expect(getTableColumnsStub.firstCall.args[1]).to.equal('orders')
@@ -89,8 +85,6 @@ describe('supabase:table-columns', () => {
       root: process.cwd(),
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
-    stub(cmd, 'logJson')
-
     await cmd.run()
 
     expect(createProfileManagerStub.firstCall.args[1]).to.equal('prod')

@@ -29,15 +29,14 @@ describe('supabase:update', () => {
     SupabaseUpdate = imported.default
   })
 
-  it('updates rows and logs JSON result', async () => {
+  it('updates rows and returns result', async () => {
     const cmd = new SupabaseUpdate(['users', '{"status":"active"}', '--filters', 'id=eq.42'], {
       configDir: '/tmp/test-config',
       root: process.cwd(),
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
-    const logJsonStub = stub(cmd, 'logJson')
 
-    await cmd.run()
+    const result = await cmd.run()
 
     expect(loadAuthConfigStub.calledOnce).to.be.true
     expect(executeStub.calledOnce).to.be.true
@@ -48,8 +47,7 @@ describe('supabase:update', () => {
     expect(optionsArg.data).to.deep.equal({status: 'active'})
     expect(optionsArg.filterMode).to.equal('string')
     expect(optionsArg.filtersString).to.equal('id=eq.42')
-    expect(logJsonStub.calledOnce).to.be.true
-    expect(logJsonStub.firstCall.args[0]).to.deep.equal(mockResult)
+    expect(result).to.deep.equal(mockResult)
   })
 
   it('uses --toon flag and logs toon output', async () => {
@@ -75,8 +73,6 @@ describe('supabase:update', () => {
         runHook: stub().resolves({failures: [], successes: []}),
       } as any,
     )
-    stub(cmd, 'logJson')
-
     await cmd.run()
 
     expect(executeStub.firstCall.args[1].select).to.equal('id,name,price')
@@ -88,8 +84,6 @@ describe('supabase:update', () => {
       root: process.cwd(),
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
-    stub(cmd, 'logJson')
-
     await cmd.run()
 
     expect(executeStub.firstCall.args[1].schema).to.equal('private')
@@ -101,8 +95,6 @@ describe('supabase:update', () => {
       root: process.cwd(),
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
-    stub(cmd, 'logJson')
-
     await cmd.run()
 
     expect(executeStub.firstCall.args[1].filtersString).to.equal('status=eq.pending&total=gte.100')
@@ -114,8 +106,6 @@ describe('supabase:update', () => {
       root: process.cwd(),
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
-    stub(cmd, 'logJson')
-
     await cmd.run()
 
     expect(createProfileManagerStub.firstCall.args[1]).to.equal('prod')
