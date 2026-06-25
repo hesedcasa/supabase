@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.1](https://github.com/hesedcasa/supabase/compare/v0.6.0...v0.6.1) (2026-06-25)
+
+
+### ♻️ Chores
+
+* introduce BaseCommand to centralize run() return and JSON ([#68](https://github.com/hesedcasa/supabase/issues/68)) ([fb45dde](https://github.com/hesedcasa/supabase/commit/fb45ddec45e80bfd3dfacd68e029d3c1a361dbe4))
+
 ## [0.6.0](https://github.com/hesedcasa/supabase/compare/v0.5.0...v0.6.0) (2026-06-05)
 
 
