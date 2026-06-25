@@ -29,15 +29,14 @@ describe('supabase:query', () => {
     SupabaseQuery = imported.default
   })
 
-  it('executes query with required args and logs JSON result', async () => {
+  it('executes query with required args and returns result', async () => {
     const cmd = new SupabaseQuery(['users', 'id,email', '--filters', 'id=eq.1'], {
       configDir: '/tmp/test-config',
       root: process.cwd(),
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
-    const logJsonStub = stub(cmd, 'logJson')
 
-    await cmd.run()
+    const result = await cmd.run()
 
     expect(loadAuthConfigStub.calledOnce).to.be.true
     expect(executeStub.calledOnce).to.be.true
@@ -48,7 +47,7 @@ describe('supabase:query', () => {
     expect(optionsArg.operation).to.equal('get')
     expect(optionsArg.tableId).to.equal('users')
     expect(optionsArg.select).to.equal('id,email')
-    expect(logJsonStub.calledOnce).to.be.true
+    expect(result).to.deep.equal(mockResult)
   })
 
   it('uses --toon flag and logs toon output', async () => {
@@ -71,8 +70,6 @@ describe('supabase:query', () => {
       root: process.cwd(),
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
-    stub(cmd, 'logJson')
-
     await cmd.run()
 
     expect(executeStub.firstCall.args[1].limit).to.equal(10)
@@ -84,8 +81,6 @@ describe('supabase:query', () => {
       root: process.cwd(),
       runHook: stub().resolves({failures: [], successes: []}),
     } as any)
-    stub(cmd, 'logJson')
-
     await cmd.run()
 
     expect(createProfileManagerStub.firstCall.args[1]).to.equal('prod')

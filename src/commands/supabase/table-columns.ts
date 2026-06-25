@@ -1,9 +1,10 @@
-import {type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
-import {Args, Command, Flags} from '@oclif/core'
+import {type ApiResult, type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {Args, Flags} from '@oclif/core'
 
+import {BaseCommand} from '../../base-command.js'
 import {getTableColumns} from '../../supabase/supabase-client.js'
 
-export default class SupabaseTableColumns extends Command {
+export default class SupabaseTableColumns extends BaseCommand {
   static override args = {
     table: Args.string({description: 'Table name to get columns', required: true}),
   }
@@ -15,7 +16,7 @@ export default class SupabaseTableColumns extends Command {
     toon: Flags.boolean({description: 'Format output as toon', required: false}),
   }
 
-  public async run(): Promise<void> {
+  public async run(): Promise<ApiResult> {
     const {args, flags} = await this.parse(SupabaseTableColumns)
     const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
@@ -27,8 +28,8 @@ export default class SupabaseTableColumns extends Command {
 
     if (flags.toon) {
       this.log(formatAsToon(result))
-    } else {
-      this.logJson(result)
     }
+
+    return result
   }
 }

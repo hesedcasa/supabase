@@ -1,9 +1,10 @@
-import {type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
-import {Args, Command, Flags} from '@oclif/core'
+import {type ApiResult, type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {Args, Flags} from '@oclif/core'
 
+import {BaseCommand} from '../../base-command.js'
 import {execute, type IDataObject} from '../../supabase/supabase-client.js'
 
-export default class SupabaseUpdate extends Command {
+export default class SupabaseUpdate extends BaseCommand {
   /* eslint-disable perfectionist/sort-objects */
   static override args = {
     table: Args.string({description: 'Table name', required: true}),
@@ -36,7 +37,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
     toon: Flags.boolean({description: 'Format output as toon', required: false}),
   }
 
-  public async run(): Promise<void> {
+  public async run(): Promise<ApiResult> {
     const {args, flags} = await this.parse(SupabaseUpdate)
     const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
@@ -63,8 +64,8 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
 
     if (flags.toon) {
       this.log(formatAsToon(result))
-    } else {
-      this.logJson(result)
     }
+
+    return result
   }
 }

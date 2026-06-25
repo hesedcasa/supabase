@@ -1,9 +1,10 @@
-import {type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
-import {Args, Command, Flags} from '@oclif/core'
+import {type ApiResult, type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {Args, Flags} from '@oclif/core'
 
+import {BaseCommand} from '../../base-command.js'
 import {execute} from '../../supabase/supabase-client.js'
 
-export default class SupabaseDelete extends Command {
+export default class SupabaseDelete extends BaseCommand {
   static override args = {
     table: Args.string({description: 'Table name', required: true}),
   }
@@ -33,7 +34,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
     toon: Flags.boolean({description: 'Format output as toon', required: false}),
   }
 
-  public async run(): Promise<void> {
+  public async run(): Promise<ApiResult> {
     const {args, flags} = await this.parse(SupabaseDelete)
     const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
@@ -52,8 +53,8 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
 
     if (flags.toon) {
       this.log(formatAsToon(result))
-    } else {
-      this.logJson(result)
     }
+
+    return result
   }
 }
