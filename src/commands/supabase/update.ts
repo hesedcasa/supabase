@@ -1,22 +1,24 @@
-import {type ApiResult, type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {type ApiResult, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Args, Flags} from '@oclif/core'
 
 import {BaseCommand} from '../../base-command.js'
 import {execute, type IDataObject} from '../../supabase/supabase-client.js'
 
 export default class SupabaseUpdate extends BaseCommand {
-  /* eslint-disable perfectionist/sort-objects */
+  /* eslint-disable perfectionist/sort-objects -- oclif parses args positionally, so declaration order matters */
   static override args = {
     table: Args.string({description: 'Table name', required: true}),
     data: Args.string({description: 'JSON object with fields to update', required: true}),
   }
   /* eslint-enable perfectionist/sort-objects */
+
   static override description = 'Update row(s) in a Supabase database table'
   static override examples = [
     '<%= config.bin %> <%= command.id %> users \'{"status":"active"}\' --filters "id=eq.42"',
     '<%= config.bin %> <%= command.id %> products \'{"price":19.99}\' --filters "name=eq.Widget" --select id,name,price',
     '<%= config.bin %> <%= command.id %> orders \'{"status":"shipped"}\' --filters "status=eq.pending&total=gte.100"',
   ]
+
   static override flags = {
     filters: Flags.string({
       description: `format: <column>=<operator>.<value>, combine multiple filters with & (AND)
@@ -39,7 +41,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
 
   public async run(): Promise<ApiResult> {
     const {args, flags} = await this.parse(SupabaseUpdate)
-    const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
+    const pm = createProfileManager(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
     if (!auth) {
       this.error(`Missing authentication config.`)

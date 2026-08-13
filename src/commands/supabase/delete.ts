@@ -1,4 +1,4 @@
-import {type ApiResult, type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {type ApiResult, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Args, Flags} from '@oclif/core'
 
 import {BaseCommand} from '../../base-command.js'
@@ -8,12 +8,14 @@ export default class SupabaseDelete extends BaseCommand {
   static override args = {
     table: Args.string({description: 'Table name', required: true}),
   }
+
   static override description = 'Delete row(s) from a Supabase database table'
   static override examples = [
     '<%= config.bin %> <%= command.id %> users --filters "id=eq.42"',
     '<%= config.bin %> <%= command.id %> orders --filters "status=eq.cancelled&created_at=lt.2024-01-01"',
     '<%= config.bin %> <%= command.id %> sessions --filters "user_id=eq.5" --select id',
   ]
+
   static override flags = {
     filters: Flags.string({
       description: `format: <column>=<operator>.<value>, combine multiple filters with & (AND)
@@ -36,7 +38,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
 
   public async run(): Promise<ApiResult> {
     const {args, flags} = await this.parse(SupabaseDelete)
-    const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
+    const pm = createProfileManager(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
     if (!auth) {
       this.error(`Missing authentication config.`)

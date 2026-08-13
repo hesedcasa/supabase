@@ -1,4 +1,4 @@
-import {type ApiResult, type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {type ApiResult, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Flags} from '@oclif/core'
 
 import {BaseCommand} from '../../base-command.js'
@@ -16,7 +16,7 @@ export default class SupabaseTables extends BaseCommand {
 
   public async run(): Promise<ApiResult> {
     const {flags} = await this.parse(SupabaseTables)
-    const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
+    const pm = createProfileManager(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
     if (!auth) {
       this.error(`Missing authentication config.`)

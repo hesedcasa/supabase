@@ -1,16 +1,17 @@
-import {type ApiResult, type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {type ApiResult, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Args, Flags} from '@oclif/core'
 
 import {BaseCommand} from '../../base-command.js'
 import {execute} from '../../supabase/supabase-client.js'
 
 export default class SupabaseQuery extends BaseCommand {
-  /* eslint-disable perfectionist/sort-objects */
+  /* eslint-disable perfectionist/sort-objects -- oclif parses args positionally, so declaration order matters */
   static override args = {
     table: Args.string({description: 'Table name', required: true}),
     select: Args.string({description: 'Columns to return in the result', required: true}),
   }
   /* eslint-enable perfectionist/sort-objects */
+
   static override description = 'Execute query on Supabase database table'
   static override examples = [
     '<%= config.bin %> <%= command.id %> users first_name,last_name,email --filters "created_at=gt.2017-01-01"',
@@ -21,6 +22,7 @@ export default class SupabaseQuery extends BaseCommand {
     '<%= config.bin %> <%= command.id %> events id,name --filters "tags=cs.{sale,featured}"',
     '<%= config.bin %> <%= command.id %> articles id,title --filters "body=fts.climate%20change"',
   ]
+
   static override flags = {
     filters: Flags.string({
       description: `format: <column>=<operator>.<value>, combine multiple filters with & (AND)
@@ -43,7 +45,7 @@ full-text: fts.query, plfts.query, phfts.query, wfts.query`,
 
   public async run(): Promise<ApiResult> {
     const {args, flags} = await this.parse(SupabaseQuery)
-    const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
+    const pm = createProfileManager(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
     if (!auth) {
       this.error(`Missing authentication config.`)
