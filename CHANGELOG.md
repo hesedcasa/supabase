@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.2](https://github.com/hesedcasa/supabase/compare/v0.6.1...v0.6.2) (2026-08-13)
+
+
+### ♻️ Chores
+
+* upgrade ESLint and fix TypeScript compilation errors ([#83](https://github.com/hesedcasa/supabase/issues/83)) ([12b99de](https://github.com/hesedcasa/supabase/commit/12b99de020ca3217028e212b78dcd8495187fb81))
+
 ## [0.6.1](https://github.com/hesedcasa/supabase/compare/v0.6.0...v0.6.1) (2026-06-25)
 
 
