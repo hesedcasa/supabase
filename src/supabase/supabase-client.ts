@@ -1,8 +1,6 @@
 import {type ApiResult, type AuthConfig, createApiClient} from '@hesed/plugin-lib'
 
-import type {FilterCondition} from './supabase-api.js'
-
-import {SupabaseApi} from './supabase-api.js'
+import {type FilterCondition, SupabaseApi} from './supabase-api.js'
 
 type FilterMode = 'manual' | 'string'
 type MatchType = 'allFilters' | 'anyFilter'
@@ -12,7 +10,7 @@ type RowOperation = 'create' | 'delete' | 'get' | 'getAll' | 'update'
  * Generic data object for node parameters and data.
  * Supports nested objects and arrays.
  */
-export interface IDataObject {
+export type IDataObject = {
   [key: string]:
     | Array<boolean | IDataObject | null | number | object | string>
     | boolean
@@ -24,7 +22,7 @@ export interface IDataObject {
     | undefined
 }
 
-interface ExecuteOptions {
+type ExecuteOptions = {
   /** Record(s) to insert or update */
   data?: IDataObject | IDataObject[]
   /** Whether to match filters with AND ('allFilters') or OR ('anyFilter') logic */
@@ -102,13 +100,13 @@ export async function getTableColumns(config: AuthConfig, tableName: string, sch
     return {error: `Table ${tableName} not found`, success: false}
   }
 
-  for (const column of Object.keys(((definitions as IDataObject)[tableName] as IDataObject).properties as object)) {
-    const columnDef = (((definitions as IDataObject)[tableName] as IDataObject).properties as IDataObject)[
-      column
-    ] as IDataObject
+  const properties = ((definitions as IDataObject)[tableName] as IDataObject).properties as IDataObject
+
+  for (const [column, definition] of Object.entries(properties)) {
+    const columnDef = definition as IDataObject
     const type = columnDef.type ?? columnDef.format ?? 'object'
     returnData.push({
-      name: `${column} - (${type})`,
+      name: `${column} - (${String(type)})`,
       value: column,
     })
   }
@@ -145,6 +143,15 @@ export async function execute(config: AuthConfig, options: ExecuteOptions): Prom
   const supabase = await getClient(config)
   const {filterMode, filters, filtersString, matchType, operation, schema, select, tableId} = options
 
+  if (operation === 'create') {
+    const records = (Array.isArray(options.data) ? options.data : [options.data ?? {}]) as Array<
+      Record<string, unknown>
+    >
+    const qs: Record<string, string> = {}
+    if (select) qs.select = select
+    return supabase.request('POST', `/${tableId}`, records, qs, undefined, supabase.getSchemaHeader('POST', schema))
+  }
+
   const applyFilters = (qs: Record<string, string | string[]>): Record<string, string | string[]> => {
     if (filterMode === 'string' && filtersString) {
       for (const part of filtersString.split('&')) {
@@ -171,13 +178,6 @@ export async function execute(config: AuthConfig, options: ExecuteOptions): Prom
     }
 
     return qs
-  }
-
-  if (operation === 'create') {
-    const records = (Array.isArray(options.data) ? options.data : [options.data ?? {}]) as Record<string, unknown>[]
-    const qs: Record<string, string> = {}
-    if (select) qs.select = select
-    return supabase.request('POST', `/${tableId}`, records, qs, undefined, supabase.getSchemaHeader('POST', schema))
   }
 
   if (operation === 'get') {

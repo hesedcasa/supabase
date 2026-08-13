@@ -1,22 +1,24 @@
-import {type ApiResult, type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {type ApiResult, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Args, Flags} from '@oclif/core'
 
 import {BaseCommand} from '../../base-command.js'
 import {execute, type IDataObject} from '../../supabase/supabase-client.js'
 
 export default class SupabaseCreate extends BaseCommand {
-  /* eslint-disable perfectionist/sort-objects */
+  /* eslint-disable perfectionist/sort-objects -- oclif parses args positionally, so declaration order matters */
   static override args = {
     table: Args.string({description: 'Table name', required: true}),
     data: Args.string({description: 'JSON object or array of objects to insert', required: true}),
   }
   /* eslint-enable perfectionist/sort-objects */
+
   static override description = 'Insert row(s) into a Supabase database table'
   static override examples = [
     '<%= config.bin %> <%= command.id %> users \'{"name":"Alice","email":"alice@example.com"}\'',
     '<%= config.bin %> <%= command.id %> users \'[{"name":"Alice"},{"name":"Bob"}]\'',
     '<%= config.bin %> <%= command.id %> products \'{"name":"Widget","price":9.99}\' --select id,name',
   ]
+
   static override flags = {
     format: Flags.string({
       default: 'json',
@@ -31,7 +33,7 @@ export default class SupabaseCreate extends BaseCommand {
 
   public async run(): Promise<ApiResult> {
     const {args, flags} = await this.parse(SupabaseCreate)
-    const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
+    const pm = createProfileManager(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
     if (!auth) {
       this.error(`Missing authentication config.`)

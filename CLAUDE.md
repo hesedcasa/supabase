@@ -180,12 +180,14 @@ const mockInput = async ({message}: {message: string}) => {
 ## Important Notes
 
 - All imports use `.js` extensions (ES modules)
-- The `static override args` block must be wrapped with `/* eslint-disable/enable perfectionist/sort-objects */` — Oclif parses args positionally
+- The `static override args` block must be wrapped with `/* eslint-disable/enable perfectionist/sort-objects */` — Oclif parses args positionally. Block-level `eslint-disable` comments need a `-- reason` description under `eslint-config-oclif@7`
 - Functions with more than 3 parameters require `// eslint-disable-next-line max-params` above the signature
 - JSDoc `@param` for inline objects must use dot-notation per property (e.g. `@param options.description`)
 - Pre-commit hook runs `npm run format && npm run find-deadcode`
-- Node.js >=18.0.0 required
-- Supabase API uses native `fetch` (Node.js built-in); use `// eslint-disable-next-line n/no-unsupported-features/node-builtins` when calling `fetch` directly
+- Node.js >=22.0.0 required (ESLint 10 and `eslint-plugin-unicorn` need Node 22+)
+- Supabase API uses native `fetch` (Node.js built-in) — no eslint-disable needed
+- `tsconfig.json` excludes `test/`; type-check tests with `npx tsc -p test/tsconfig.json --noEmit`
+- Type-aware ESLint rules are disabled for `test/**` (see `eslint.config.mjs`)
 - `delete` command requires `--filters` (always required — no filter-less deletes)
 
 ## Commit Message Convention

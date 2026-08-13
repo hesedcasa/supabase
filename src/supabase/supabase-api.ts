@@ -2,7 +2,7 @@ import {type ApiResult, type AuthConfig} from '@hesed/plugin-lib'
 
 type HttpMethod = 'DELETE' | 'GET' | 'HEAD' | 'PATCH' | 'POST' | 'PUT'
 
-export interface FilterCondition {
+export type FilterCondition = {
   condition: string
   keyName: string
   keyValue: string
@@ -10,7 +10,7 @@ export interface FilterCondition {
 }
 
 export class SupabaseApi {
-  private config: AuthConfig
+  private readonly config: AuthConfig
 
   constructor(config: AuthConfig) {
     this.config = config
@@ -36,7 +36,9 @@ export class SupabaseApi {
     return Object.assign(obj, {[value.keyName]: `${value.condition}.${value.keyValue}`})
   }
 
-  clearClients(): void {}
+  clearClients(): void {
+    // No cached client state to release — SupabaseApi talks to PostgREST over plain fetch.
+  }
 
   getSchemaHeader(method: HttpMethod, schema?: string): Record<string, string> {
     if (!schema) return {}
@@ -56,7 +58,7 @@ export class SupabaseApi {
   async request(
     method: HttpMethod,
     resource: string,
-    body: Record<string, unknown> | Record<string, unknown>[] = {},
+    body: Array<Record<string, unknown>> | Record<string, unknown> = {},
     qs: Record<string, string | string[]> = {},
     uri?: string,
     headers: Record<string, string> = {},
@@ -83,11 +85,10 @@ export class SupabaseApi {
         ...headers,
       }
 
-      const hasBody = Array.isArray(body) ? body.length > 0 : Object.keys(body).length > 0
+      const hasBody = (Array.isArray(body) ? body : Object.keys(body)).length > 0
 
-      // eslint-disable-next-line n/no-unsupported-features/node-builtins
-      const response = await fetch(url.toString(), {
-        ...(hasBody ? {body: JSON.stringify(body)} : {}),
+      const response = await fetch(url.href, {
+        ...(hasBody && {body: JSON.stringify(body)}),
         headers: requestHeaders,
         method,
       })
@@ -111,14 +112,12 @@ export class SupabaseApi {
 
   async validateCredentials(): Promise<ApiResult> {
     try {
-      // eslint-disable-next-line n/no-unsupported-features/node-builtins
       const response = await fetch(`${this.config.host}/rest/v1/`, {
         headers: {
           apikey: this.config.apiToken,
           Authorization: `Bearer ${this.config.apiToken}`,
           Connection: 'close',
         },
-        method: 'GET',
       })
 
       return {

@@ -6,8 +6,7 @@ export abstract class BaseCommand extends Command {
   public override jsonEnabled(): boolean {
     const separatorIndex = this.argv.indexOf('--')
     const flagArgs = separatorIndex === -1 ? this.argv : this.argv.slice(0, separatorIndex)
-    if (flagArgs.includes('--toon')) return false
-    return true
+    return !flagArgs.includes('--toon')
   }
 
   // oclif sets this.parsed=true only after Parser.parse() returns successfully.

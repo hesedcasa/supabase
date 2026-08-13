@@ -1,4 +1,4 @@
-import {type ApiResult, type AuthConfig, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
+import {type ApiResult, createProfileManager, formatAsToon} from '@hesed/plugin-lib'
 import {Args, Flags} from '@oclif/core'
 
 import {BaseCommand} from '../../base-command.js'
@@ -8,6 +8,7 @@ export default class SupabaseTableColumns extends BaseCommand {
   static override args = {
     table: Args.string({description: 'Table name to get columns', required: true}),
   }
+
   static override description = 'List all columns in a table in Supabase database'
   static override examples = ['<%= config.bin %> <%= command.id %>']
   static override flags = {
@@ -18,7 +19,7 @@ export default class SupabaseTableColumns extends BaseCommand {
 
   public async run(): Promise<ApiResult> {
     const {args, flags} = await this.parse(SupabaseTableColumns)
-    const pm = createProfileManager<AuthConfig>(this.config, flags.profile, 'spb-config.json')
+    const pm = createProfileManager(this.config, flags.profile, 'spb-config.json')
     const auth = await pm.loadAuthConfig()
     if (!auth) {
       this.error(`Missing authentication config.`)
