@@ -26,7 +26,7 @@ $ npm install -g @hesed/supabase
 $ spb COMMAND
 running command...
 $ spb (--version)
-@hesed/supabase/0.6.1 linux-x64 node-v22.22.3
+@hesed/supabase/0.6.2 linux-x64 node-v22.23.2
 $ spb --help [COMMAND]
 USAGE
   $ spb COMMAND
@@ -76,7 +76,7 @@ EXAMPLES
   $ spb supabase auth add -p prod
 ```
 
-_See code: [src/commands/supabase/auth/add.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/auth/add.ts)_
+_See code: [src/commands/supabase/auth/add.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/auth/add.ts)_
 
 ## `spb supabase auth delete`
 
@@ -101,7 +101,7 @@ EXAMPLES
   $ spb supabase auth delete -p prod
 ```
 
-_See code: [src/commands/supabase/auth/delete.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/auth/delete.ts)_
+_See code: [src/commands/supabase/auth/delete.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/auth/delete.ts)_
 
 ## `spb supabase auth list`
 
@@ -121,7 +121,7 @@ EXAMPLES
   $ spb supabase auth list
 ```
 
-_See code: [src/commands/supabase/auth/list.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/auth/list.ts)_
+_See code: [src/commands/supabase/auth/list.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/auth/list.ts)_
 
 ## `spb supabase auth profile`
 
@@ -146,7 +146,7 @@ EXAMPLES
   $ spb supabase auth profile --default test
 ```
 
-_See code: [src/commands/supabase/auth/profile.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/auth/profile.ts)_
+_See code: [src/commands/supabase/auth/profile.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/auth/profile.ts)_
 
 ## `spb supabase auth test`
 
@@ -171,7 +171,7 @@ EXAMPLES
   $ spb supabase auth test -p prod
 ```
 
-_See code: [src/commands/supabase/auth/test.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/auth/test.ts)_
+_See code: [src/commands/supabase/auth/test.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/auth/test.ts)_
 
 ## `spb supabase auth update`
 
@@ -199,7 +199,7 @@ EXAMPLES
   $ spb supabase auth update -p test
 ```
 
-_See code: [src/commands/supabase/auth/update.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/auth/update.ts)_
+_See code: [src/commands/supabase/auth/update.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/auth/update.ts)_
 
 ## `spb supabase create TABLE DATA`
 
@@ -236,7 +236,7 @@ EXAMPLES
   $ spb supabase create products '{"name":"Widget","price":9.99}' --select id,name
 ```
 
-_See code: [src/commands/supabase/create.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/create.ts)_
+_See code: [src/commands/supabase/create.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/create.ts)_
 
 ## `spb supabase delete TABLE`
 
@@ -283,7 +283,7 @@ FLAG DESCRIPTIONS
     full-text: fts.query, plfts.query, phfts.query, wfts.query
 ```
 
-_See code: [src/commands/supabase/delete.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/delete.ts)_
+_See code: [src/commands/supabase/delete.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/delete.ts)_
 
 ## `spb supabase query TABLE SELECT`
 
@@ -340,7 +340,7 @@ FLAG DESCRIPTIONS
     full-text: fts.query, plfts.query, phfts.query, wfts.query
 ```
 
-_See code: [src/commands/supabase/query.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/query.ts)_
+_See code: [src/commands/supabase/query.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/query.ts)_
 
 ## `spb supabase table-columns TABLE`
 
@@ -368,7 +368,7 @@ EXAMPLES
   $ spb supabase table-columns
 ```
 
-_See code: [src/commands/supabase/table-columns.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/table-columns.ts)_
+_See code: [src/commands/supabase/table-columns.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/table-columns.ts)_
 
 ## `spb supabase tables`
 
@@ -393,7 +393,7 @@ EXAMPLES
   $ spb supabase tables
 ```
 
-_See code: [src/commands/supabase/tables.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/tables.ts)_
+_See code: [src/commands/supabase/tables.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/tables.ts)_
 
 ## `spb supabase update TABLE DATA`
 
@@ -442,5 +442,5 @@ FLAG DESCRIPTIONS
     full-text: fts.query, plfts.query, phfts.query, wfts.query
 ```
 
-_See code: [src/commands/supabase/update.ts](https://github.com/hesedcasa/supabase/blob/v0.6.1/src/commands/supabase/update.ts)_
+_See code: [src/commands/supabase/update.ts](https://github.com/hesedcasa/supabase/blob/v0.6.2/src/commands/supabase/update.ts)_
 <!-- commandsstop -->
