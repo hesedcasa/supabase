@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.3](https://github.com/hesedcasa/supabase/compare/v0.6.2...v0.6.3) (2026-11-17)
+
+
+### 🛠️ Fixes
+
+* **deps:** align @oclif/core 5 with @hesed/plugin-lib 0.13.0 ([#122](https://github.com/hesedcasa/supabase/issues/122)) ([413bd60](https://github.com/hesedcasa/supabase/commit/413bd60baca6281881bf610ed35367c91aac87a4))
+* **deps:** align @oclif/core 5 with @hesed/plugin-lib 0.13.0 ([#125](https://github.com/hesedcasa/supabase/issues/125)) ([a3f133b](https://github.com/hesedcasa/supabase/commit/a3f133b5b44123b394a59f5abafce9b812c73317))
+
 ## [0.6.2](https://github.com/hesedcasa/supabase/compare/v0.6.1...v0.6.2) (2026-08-13)
 
 
